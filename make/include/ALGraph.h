@@ -4,6 +4,8 @@
 //---------------------------------------------------------------------------
 #include <vector>
 #include <map> //self add
+#include <queue> //self add
+#include <stack> //self add
 
 struct DijkstraInfo
 {
@@ -34,7 +36,12 @@ class ALGraph
     
     // An EXAMPLE of some other classes you may want to create and 
     // implement in ALGraph.cpp
-    class GNode; 
+    class GNode{
+      public:
+        unsigned id;
+        GNode(): id(-1){} 
+        GNode(unsigned node_) : id(node_){}
+    }; 
     class GEdge;
     struct AdjInfo
     {
@@ -47,11 +54,11 @@ class ALGraph
     };
     
     // Other private fields and methods
-    std::map<unsigned, std::vector<AdjacencyInfo>> graph_;
-    // std::map<GNode, std::vector<AdjInfo>> graph_;
+    std::map<unsigned, std::vector<AdjInfo>> graph_;
     ALIST ALIST_;
 
     void AddEdge(unsigned node1, unsigned node2, unsigned weight);
+    void writeToList(std::vector<ALGraph::AdjInfo>& graphElement, std::vector<AdjacencyInfo>& list, std::priority_queue<AdjInfo> pq);
 };
 
 #endif

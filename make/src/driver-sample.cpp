@@ -684,7 +684,7 @@ int main(int argc, char **argv)
  int test ;
   if (argc > 1)
     test = std::atoi(argv[1]);
-  std::cin>>test;
+//   std::cin>>test;
     
    
   // ********** Adjaceny list tests ********** 

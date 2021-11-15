@@ -1,7 +1,7 @@
 #include "ALGraph.h"
 #include <queue>
 
-ALGraph::ALGraph(unsigned size){\
+ALGraph::ALGraph(unsigned size){
   for(unsigned i = 0; i<size ; i++){
     std::vector<AdjacencyInfo> AdjList_;
     // graph_.insert({i, AdjList_});

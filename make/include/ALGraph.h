@@ -58,7 +58,8 @@ class ALGraph
     ALIST ALIST_;
 
     void AddEdge(unsigned node1, unsigned node2, unsigned weight);
-    void writeToList(std::vector<ALGraph::AdjInfo>& graphElement, std::vector<AdjacencyInfo>& list, std::priority_queue<AdjInfo> pq);
+    void writeToList(std::vector<ALGraph::AdjInfo>& graphElement, 
+      std::vector<AdjacencyInfo>& list, std::priority_queue<AdjInfo> pq);
 };
 
 #endif

@@ -54,12 +54,19 @@ class ALGraph
     };
     
     // Other private fields and methods
-    std::map<unsigned, std::vector<AdjInfo>> graph_;
+    mutable std::map<unsigned, std::vector<AdjInfo>> graph_;
     ALIST ALIST_;
+    mutable std::vector<DijkstraInfo> DijkstraList;
+    mutable std::vector<unsigned> DistArray;
+    mutable std::vector<bool> sptSet;
+    const unsigned INFINITY_ =static_cast<unsigned>(-1);
+    unsigned size_;
 
     void AddEdge(unsigned node1, unsigned node2, unsigned weight);
     void writeToList(std::vector<ALGraph::AdjInfo>& graphElement, 
       std::vector<AdjacencyInfo>& list, std::priority_queue<AdjInfo> pq);
+    // unsigned minDistance(std::vector<int>& dist, std::vector<bool>& sptSet) ;
+    // void helperfunction();
 };
 
 #endif

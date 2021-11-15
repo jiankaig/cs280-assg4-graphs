@@ -3,6 +3,7 @@
 #define ALGRAPH_H
 //---------------------------------------------------------------------------
 #include <vector>
+#include <map> //self add
 
 struct DijkstraInfo
 {
@@ -46,6 +47,11 @@ class ALGraph
     };
     
     // Other private fields and methods
+    std::map<unsigned, std::vector<AdjacencyInfo>> graph_;
+    // std::map<GNode, std::vector<AdjInfo>> graph_;
+    ALIST ALIST_;
+
+    void AddEdge(unsigned node1, unsigned node2, unsigned weight);
 };
 
 #endif

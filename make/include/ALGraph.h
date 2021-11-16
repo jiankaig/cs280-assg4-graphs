@@ -53,7 +53,14 @@ class ALGraph
       bool operator<(const AdjInfo& rhs) const;
       bool operator>(const AdjInfo& rhs) const;
     };
-    
+    struct Comp{
+      bool operator()(const AdjInfo& a, const AdjInfo& b){
+        if(a.weight != b.weight)
+          return a.weight > b.weight;
+        else
+          return a.node->id > b.node->id;
+      }
+    };
     // Other private fields and methods
     mutable std::map<unsigned, std::vector<AdjInfo>> graph_;
     ALIST ALIST_;
@@ -65,7 +72,7 @@ class ALGraph
 
     void AddEdge(unsigned node1, unsigned node2, unsigned weight);
     void writeToList(std::vector<ALGraph::AdjInfo>& graphElement, 
-      std::vector<AdjacencyInfo>& list, std::priority_queue<AdjInfo> pq);
+      std::vector<AdjacencyInfo>& list, std::priority_queue<AdjInfo, std::vector<AdjInfo>, Comp> pq);
     void checkAdjNodes(std::vector<AdjInfo>& AdjInfoList,
       unsigned* DistArrayElement, int index)const;
     unsigned SelectMinNode(std::vector<unsigned>& DistArray, std::vector<bool>& SelectedDistArray)const;

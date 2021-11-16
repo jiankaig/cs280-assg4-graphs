@@ -68,8 +68,8 @@ void ALGraph::AddEdge(unsigned node1, unsigned node2, unsigned weight){
   temp.weight = weight;
 
   // load list of adjacent vertices into priority queue
-  std::priority_queue<AdjInfo> pq;
-  // std::priority_queue<AdjInfo, std::vector, std::greater> pq;
+  // std::priority_queue<AdjInfo> pq;
+  std::priority_queue<AdjInfo, std::vector<AdjInfo>, Comp> pq;
   
   for(unsigned i=0; i < graph_[node1-1].size(); i++){
     pq.push(graph_[node1-1][i]);
@@ -83,23 +83,29 @@ void ALGraph::AddEdge(unsigned node1, unsigned node2, unsigned weight){
 }
 
 void ALGraph::writeToList(std::vector<ALGraph::AdjInfo>& graphElement, 
-  std::vector<AdjacencyInfo>& list, std::priority_queue<ALGraph::AdjInfo> pq){
+  std::vector<AdjacencyInfo>& list, 
+  std::priority_queue<ALGraph::AdjInfo, std::vector<AdjInfo>, ALGraph::Comp> pq){
   graphElement.clear();
   list.clear();
-  std::stack<AdjInfo> s;
+  // std::stack<AdjInfo> s;
   while(!pq.empty()){
-    s.push(pq.top());
+    // s.push(pq.top());
+    AdjacencyInfo temp;
+    temp.id = pq.top().node->id;
+    temp.weight = pq.top().weight;
+    graphElement.push_back(pq.top());
+    list.push_back(temp);
     pq.pop();
   }
 
-  while(!s.empty()){
-    AdjacencyInfo temp;
-    temp.id = s.top().node->id;
-    temp.weight = s.top().weight;
-    graphElement.push_back(s.top());
-    list.push_back(temp);
-    s.pop();
-  }
+  // while(!s.empty()){
+  //   AdjacencyInfo temp;
+  //   temp.id = s.top().node->id;
+  //   temp.weight = s.top().weight;
+  //   graphElement.push_back(s.top());
+  //   list.push_back(temp);
+  //   s.pop();
+  // }
 }
 
 void ALGraph::checkAdjNodes(std::vector<AdjInfo>& AdjInfoList, unsigned* DistArrayElement, int index)const{

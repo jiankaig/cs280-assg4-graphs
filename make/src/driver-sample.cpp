@@ -622,8 +622,8 @@ void TestBig(unsigned nodes, unsigned percentage)
 
 #define DUMP_MAPx
 
-    //std::cout << "Creating graph ...\n";
-    //time_t start_create = clock();
+    // std::cout << "Creating graph ...\n";
+    // time_t start_create = clock();
     ALGraph g(num_nodes);
     for (unsigned i = 1; i <= num_nodes; i++)
     {
@@ -649,7 +649,7 @@ void TestBig(unsigned nodes, unsigned percentage)
         std::cout << std::endl;
 #endif
     }
-    //time_t end_create = clock();
+    // time_t end_create = clock();
 
     std::cout << "Nodes: " << num_nodes << ", Edges: " << edges << ", Density: " << percentage << "%" << std::endl;
     ALIST alist = g.GetAList();
@@ -666,10 +666,10 @@ void TestBig(unsigned nodes, unsigned percentage)
         std::vector<DijkstraInfo> pi = g.Dijkstra(start_node);
         DumpDijkstraInfo(pi, start_node);
     }
-    //long create = (long)(end_create - start_create);
+    // long create = (long)(end_create - start_create);
     //long search = (long)(end_search - start_search);
     //long total = create + search;
-    //std::cout << "Create = " << create << " ms, ";
+    // std::cout << "Create = " << create << " ms, ";
     //std::cout << "Search = " << search << " ms, ";
     //std::cout << "Total = " << total << " ms\n";
     delete[] array;

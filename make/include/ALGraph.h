@@ -62,7 +62,6 @@ class ALGraph
     mutable std::vector<bool> SelectedDistArray;
     const unsigned INFINITY_ =static_cast<unsigned>(-1);
     unsigned size_;
-    std::vector<std::stack<unsigned>> pathList_;
 
     void AddEdge(unsigned node1, unsigned node2, unsigned weight);
     void writeToList(std::vector<ALGraph::AdjInfo>& graphElement, 

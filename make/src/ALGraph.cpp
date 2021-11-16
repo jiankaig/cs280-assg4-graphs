@@ -1,11 +1,8 @@
 #include "ALGraph.h"
-
+#include <iostream>
 ALGraph::ALGraph(unsigned size) : size_(size){
   for(unsigned i = 0; i<size ; i++){
     DijkstraInfo temp;
-    std::stack<unsigned> tempStack;
-    // std::vector<unsigned> path_;
-    // temp.path = path_;
     std::vector<AdjacencyInfo> AdjList_;
     std::vector<AdjInfo> AdjInfoList_;
     graph_.insert({i, AdjInfoList_});
@@ -13,7 +10,6 @@ ALGraph::ALGraph(unsigned size) : size_(size){
     DistArray.push_back(INFINITY_);
     SelectedDistArray.push_back(false);
     DijkstraList.push_back(temp);
-    pathList_.push_back(tempStack);
   }
 }
 
@@ -53,8 +49,10 @@ std::vector<DijkstraInfo> ALGraph::Dijkstra(unsigned start_node) const{
 
   //compensate paths with start ndoe
   for(unsigned i=0;i<graph_.size();i++){
-    if(i!=start_node-1)
+    if(i!=start_node-1 && DijkstraList[i].path.size()!=0)
       DijkstraList[i].path.insert(DijkstraList[i].path.begin(), start_node);
+    else if(i != start_node-1)
+      DijkstraList[i].cost = -1;      
   }
 
   return DijkstraList; //returns a list of DijkstraInfo
@@ -107,17 +105,18 @@ void ALGraph::writeToList(std::vector<ALGraph::AdjInfo>& graphElement,
 void ALGraph::checkAdjNodes(std::vector<AdjInfo>& AdjInfoList, unsigned* DistArrayElement, int index)const{
   //check adjacent nodes
   for(unsigned j=0; j<AdjInfoList.size(); j++){
-    if(DistArray[AdjInfoList[j].node->id-1] == INFINITY_ || 
-      *DistArrayElement + AdjInfoList[j].weight < DistArray[AdjInfoList[j].node->id-1])
+    if(DistArray[AdjInfoList[j].node->id-1] == INFINITY_  || 
+      (*DistArrayElement + AdjInfoList[j].weight < DistArray[AdjInfoList[j].node->id-1] && 
+      !SelectedDistArray[AdjInfoList[j].node->id-1]))
     {
-      //graph_[i][j].node.id; // <- adjacent node
-      DistArray[AdjInfoList[j].node->id-1] = *DistArrayElement + AdjInfoList[j].weight;
-      DijkstraList[AdjInfoList[j].node->id-1].cost = DistArray[AdjInfoList[j].node->id-1];
-      DijkstraList[AdjInfoList[j].node->id-1].path = DijkstraList[index].path;
-      DijkstraList[AdjInfoList[j].node->id-1].path.push_back(AdjInfoList[j].node->id);
+      if(*DistArrayElement!=INFINITY_){
+        DistArray[AdjInfoList[j].node->id-1] = *DistArrayElement + AdjInfoList[j].weight;
+        DijkstraList[AdjInfoList[j].node->id-1].cost = DistArray[AdjInfoList[j].node->id-1];
+        DijkstraList[AdjInfoList[j].node->id-1].path = DijkstraList[index].path;
+        DijkstraList[AdjInfoList[j].node->id-1].path.push_back(AdjInfoList[j].node->id);
+
+      }
     }
-    // else
-    //   DijkstraList[i].cost = DistArray[i];
   }
 }
 

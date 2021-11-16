@@ -6,6 +6,7 @@
 #include <map> //self add
 #include <queue> //self add
 #include <stack> //self add
+#include <algorithm> //self add
 
 struct DijkstraInfo
 {
@@ -58,15 +59,17 @@ class ALGraph
     ALIST ALIST_;
     mutable std::vector<DijkstraInfo> DijkstraList;
     mutable std::vector<unsigned> DistArray;
-    mutable std::vector<bool> sptSet;
+    mutable std::vector<bool> SelectedDistArray;
     const unsigned INFINITY_ =static_cast<unsigned>(-1);
     unsigned size_;
 
     void AddEdge(unsigned node1, unsigned node2, unsigned weight);
     void writeToList(std::vector<ALGraph::AdjInfo>& graphElement, 
       std::vector<AdjacencyInfo>& list, std::priority_queue<AdjInfo> pq);
-    // unsigned minDistance(std::vector<int>& dist, std::vector<bool>& sptSet) ;
-    // void helperfunction();
+    void updateDistArray();
+    void updateDistArrayWithAdjNodes();
+    void checkAdjNodes(std::vector<AdjInfo>& AdjInfoList, unsigned* DistArrayElement)const;
+    unsigned SelectMinNode(std::vector<unsigned>& DistArray, std::vector<bool>& SelectedDistArray)const;
 };
 
 #endif

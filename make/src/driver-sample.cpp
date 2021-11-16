@@ -689,7 +689,7 @@ int main(int argc, char **argv)
    
   // ********** Adjaceny list tests ********** 
   //RunDijkstra = false;
- // TestAllLists();
+//  TestAllLists();
 
   //// ********** Dijkstra tests ********** 
   RunDijkstra = true;

@@ -39,8 +39,8 @@ std::vector<DijkstraInfo> ALGraph::Dijkstra(unsigned start_node) const{
     checkAdjNodes(graph_[start_node-1], &DistArray[start_node-1], start_node-1);
     
   } 
-  DijkstraList[0].cost = 0;
-  DijkstraList[0].path.push_back(start_node);
+  DijkstraList[start_node-1].cost = 0;
+  DijkstraList[start_node-1].path.push_back(start_node);
 
   // 2. select node with smallest distance that has not been selected
 
@@ -142,10 +142,14 @@ ALGraph::AdjInfo::AdjInfo() : node(new GNode()), weight(0), cost(0){}
 bool ALGraph::AdjInfo::operator<(const AdjInfo& rhs) const{
   if(this->weight < rhs.weight)
     return true;
+  else if(this->weight == rhs.weight && this->node->id < rhs.node->id)
+    return true;
   return false;
 }
 bool ALGraph::AdjInfo::operator>(const AdjInfo& rhs) const{
   if(this->weight > rhs.weight)
+    return true;
+  else if(this->weight == rhs.weight && this->node->id > rhs.node->id)
     return true;
   return false;
 }

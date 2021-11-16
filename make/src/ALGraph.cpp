@@ -3,6 +3,9 @@
 ALGraph::ALGraph(unsigned size) : size_(size){
   for(unsigned i = 0; i<size ; i++){
     DijkstraInfo temp;
+    std::stack<unsigned> tempStack;
+    // std::vector<unsigned> path_;
+    // temp.path = path_;
     std::vector<AdjacencyInfo> AdjList_;
     std::vector<AdjInfo> AdjInfoList_;
     graph_.insert({i, AdjInfoList_});
@@ -10,7 +13,7 @@ ALGraph::ALGraph(unsigned size) : size_(size){
     DistArray.push_back(INFINITY_);
     SelectedDistArray.push_back(false);
     DijkstraList.push_back(temp);
-    // sptSet.push_back(false);// sptSet[i] will be true if vertex i is included in shortest path tree
+    pathList_.push_back(tempStack);
   }
 }
 
@@ -33,30 +36,25 @@ std::vector<DijkstraInfo> ALGraph::Dijkstra(unsigned start_node) const{
   DistArray[start_node-1] = 0; 
   SelectedDistArray[start_node-1] = true;
   for(unsigned i=0;i<graph_[start_node-1].size();i++){
-    checkAdjNodes(graph_[start_node-1], &DistArray[start_node-1]);
+    checkAdjNodes(graph_[start_node-1], &DistArray[start_node-1], start_node-1);
+    
   } 
   DijkstraList[0].cost = 0;
+  DijkstraList[0].path.push_back(start_node);
 
   // 2. select node with smallest distance that has not been selected
 
   // 3. update DistArray (those unselected ones only?)
   for(unsigned i=1;i<graph_.size();i++){
       unsigned minNode = SelectMinNode(DistArray, SelectedDistArray);
-      checkAdjNodes(graph_[minNode], &DistArray[minNode]);
-      auto num = DistArray[minNode];
-      num = DistArray[minNode];
-      (void)num;
+      checkAdjNodes(graph_[minNode], &DistArray[minNode], minNode);
   } 
-
   // 4. repeat 2 & 3 size_-1 times
 
-  //update DistArray for particular node
-  for(unsigned i=0; i < size_; i++){
-    std::vector<unsigned> path;
-    // checkAdjNodes(graph_[i], &DistArray[i]);
-
-    // DijkstraList[i].cost = DistArray[i];
-    DijkstraList[i].path = path;
+  //compensate paths with start ndoe
+  for(unsigned i=0;i<graph_.size();i++){
+    if(i!=start_node-1)
+      DijkstraList[i].path.insert(DijkstraList[i].path.begin(), start_node);
   }
 
   return DijkstraList; //returns a list of DijkstraInfo
@@ -106,13 +104,7 @@ void ALGraph::writeToList(std::vector<ALGraph::AdjInfo>& graphElement,
   }
 }
 
-void ALGraph::updateDistArray(){
-
-}
-void ALGraph::updateDistArrayWithAdjNodes(){
-
-}
-void ALGraph::checkAdjNodes(std::vector<AdjInfo>& AdjInfoList, unsigned* DistArrayElement)const{
+void ALGraph::checkAdjNodes(std::vector<AdjInfo>& AdjInfoList, unsigned* DistArrayElement, int index)const{
   //check adjacent nodes
   for(unsigned j=0; j<AdjInfoList.size(); j++){
     if(DistArray[AdjInfoList[j].node->id-1] == INFINITY_ || 
@@ -121,6 +113,8 @@ void ALGraph::checkAdjNodes(std::vector<AdjInfo>& AdjInfoList, unsigned* DistArr
       //graph_[i][j].node.id; // <- adjacent node
       DistArray[AdjInfoList[j].node->id-1] = *DistArrayElement + AdjInfoList[j].weight;
       DijkstraList[AdjInfoList[j].node->id-1].cost = DistArray[AdjInfoList[j].node->id-1];
+      DijkstraList[AdjInfoList[j].node->id-1].path = DijkstraList[index].path;
+      DijkstraList[AdjInfoList[j].node->id-1].path.push_back(AdjInfoList[j].node->id);
     }
     // else
     //   DijkstraList[i].cost = DistArray[i];
@@ -128,41 +122,17 @@ void ALGraph::checkAdjNodes(std::vector<AdjInfo>& AdjInfoList, unsigned* DistArr
 }
 
 unsigned ALGraph::SelectMinNode(std::vector<unsigned>& DistArray, std::vector<bool>& SelectedDistArray)const{
-  // std::vector<unsigned> DistArrayCopy = DistArray;
-  // long int removedElement = INFINITY_;
-  // // for(unsigned i=0;i<SelectedDistArray.size();i++){
-  // while(!DistArrayCopy.empty()){
-  //   auto it = std::min_element(std::begin(DistArrayCopy), std::end(DistArrayCopy));
-  //   long int min_element_index = std::distance(std::begin(DistArrayCopy), it);
-  //   if(removedElement< min_element_index)
-  //     min_element_index += 1; 
-  //   if(!SelectedDistArray[min_element_index]){
-  //     SelectedDistArray[min_element_index] = true;
-  //     return static_cast<unsigned>(min_element_index);
-  //   } 
-  //   else{
-  //     DistArrayCopy.erase(it);
-  //     removedElement = min_element_index;
-  //   }
-
     // Initialize min value
     unsigned min = INFINITY_;
     unsigned min_index;
  
     for (unsigned v = 0; v < DistArray.size(); v++){
-        auto num2 = DistArray[v];
-        bool num3 = SelectedDistArray[v];
-        (void)num2;
-        (void)num3;
         if (SelectedDistArray[v] == false && DistArray[v] <= min){
             min = DistArray[v], min_index = v;
-            
         }
     }
     SelectedDistArray[min_index] = true;
     return min_index;
-
-  // return INFINITY_;
 }
 
 
